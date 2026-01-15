@@ -147,14 +147,8 @@ function setupEventListeners() {
         clearSearchBtn.addEventListener('click', clearSearch);
     }
     
-    // 表头排序功能
-    const sortableHeaders = document.querySelectorAll('.sortable');
-    sortableHeaders.forEach(header => {
-        header.addEventListener('click', () => {
-            const sortField = header.getAttribute('data-sort');
-            handleSort(sortField);
-        });
-    });
+    // 表头排序功能 - 初始化时绑定
+    initSortHeaders();
     
     console.log('事件监听器已设置');
     console.log('DOM元素检查:', {
@@ -249,6 +243,9 @@ function calculateAndDisplayRanking() {
 
     // 渲染排名表格
     renderRankingTable(rankedTeams);
+    
+    // 更新表头排序指示器
+    updateSortHeaders();
 }
 
 // 更新统计数据
@@ -490,6 +487,18 @@ function sortTeams(teams) {
         }
         return b.totalScore - a.totalScore;
     });
+}
+
+// 初始化排序表头
+function initSortHeaders() {
+    const sortableHeaders = document.querySelectorAll('.sortable');
+    sortableHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            const sortField = header.getAttribute('data-sort');
+            handleSort(sortField);
+        });
+    });
+    updateSortHeaders();
 }
 
 // 处理排序点击
