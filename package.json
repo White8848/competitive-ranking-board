@@ -1,0 +1,27 @@
+{
+  "name": "kdocs-data-extractor",
+  "version": "1.0.0",
+  "description": "Extract data from KDocs (金山文档) shared links using browser automation",
+  "main": "kdocs-puppeteer-example.js",
+  "scripts": {
+    "extract": "node kdocs-puppeteer-example.js",
+    "test": "node kdocs-puppeteer-example.js"
+  },
+  "keywords": [
+    "kdocs",
+    "wps",
+    "data-extraction",
+    "web-scraping",
+    "puppeteer",
+    "automation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^21.0.0"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
