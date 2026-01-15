@@ -41,7 +41,14 @@
             </div>
         </div>
 
-        <div class="data-input-section" id="kdocsSection" style="display: none;">
+        <!-- 标签页导航 -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" data-tab="ranking">📊 排行榜</button>
+            <button class="tab-btn" data-tab="playoff">🏆 淘汰赛预测</button>
+        </div>
+
+        <!-- 排行榜视图 -->
+        <div class="tab-content active" id="rankingView">
             <h3>从金山文档导入数据</h3>
             <div class="kdocs-notice">
                 <strong>💡 实时自动更新使用方法：</strong>
@@ -73,40 +80,87 @@
                     <button id="uploadCSV" class="btn btn-secondary">上传CSV文件</button>
                 </div>
             </div>
-        </div>
 
-        <div class="data-input-section" id="dataInputSection" style="display: none;">
-            <h3>手动输入比赛数据</h3>
-            <p class="hint">请粘贴从金山文档导出的CSV数据，格式：队伍名称,胜场数,负场数,积分</p>
-            <textarea id="csvInput" placeholder="示例：
+            <div class="data-input-section" id="dataInputSection" style="display: none;">
+                <h3>手动输入比赛数据</h3>
+                <p class="hint">请粘贴从金山文档导出的CSV数据，格式：队伍名称,胜场数,负场数,积分</p>
+                <textarea id="csvInput" placeholder="示例：
 队伍A,10,2,28
 队伍B,8,4,24
 队伍C,7,5,21"></textarea>
-            <button id="parseData" class="btn btn-primary">解析数据</button>
+                <button id="parseData" class="btn btn-primary">解析数据</button>
+            </div>
+
+            <div class="stats-summary">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalTeams">0</div>
+                    <div class="stat-label">参赛队伍</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalMatches">0</div>
+                    <div class="stat-label">总比赛场次</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgScore">0</div>
+                    <div class="stat-label">平均积分</div>
+                </div>
+            </div>
+
+            <div class="featured-teams" id="featuredTeams" style="display: none;">
+                <div class="featured-header">
+                    <h2>⭐ 重点关注战队</h2>
+                    <button id="manageFeatured" class="btn btn-small">⚙️ 管理关注</button>
+                </div>
+                <div class="featured-teams-grid" id="featuredTeamsGrid">
+                    <!-- 动态生成关注的战队卡片 -->
+                </div>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" class="search-input" placeholder="🔍 搜索战队名称...">
+                <button id="clearSearch" class="btn-clear" style="display: none;">✕</button>
+            </div>
+            <div class="search-result" id="searchResult"></div>
+
+            <div class="table-container">
+                <table id="rankingTable">
+                    <thead>
+                        <tr>
+                            <th class="rank-col">排名</th>
+                            <th class="team-col">队伍名称</th>
+                            <th class="number-col sortable" data-sort="wins">胜场 <span class="sort-icon"></span></th>
+                            <th class="number-col sortable" data-sort="losses">负场 <span class="sort-icon"></span></th>
+                            <th class="number-col sortable" data-sort="totalMatches">总场次 <span class="sort-icon"></span></th>
+                            <th class="number-col sortable" data-sort="winRate">胜率 <span class="sort-icon"></span></th>
+                            <th class="score-col sortable active" data-sort="totalWinLossScore">胜负分 <span class="sort-icon">▼</span></th>
+                            <th class="number-col sortable" data-sort="netScore">净胜分 <span class="sort-icon"></span></th>
+                            <th class="number-col sortable" data-sort="totalScore">总分 <span class="sort-icon"></span></th>
+                            <th class="number-col epa-col sortable" data-sort="epa">EPA <span class="sort-icon"></span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="rankingBody">
+                        <tr>
+                            <td colspan="10" class="no-data">暂无数据，请点击"加载示例数据"</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <div class="stats-summary">
-            <div class="stat-card">
-                <div class="stat-value" id="totalTeams">0</div>
-                <div class="stat-label">参赛队伍</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="totalMatches">0</div>
-                <div class="stat-label">总比赛场次</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="avgScore">0</div>
-                <div class="stat-label">平均积分</div>
-            </div>
-        </div>
-
-        <div class="featured-teams" id="featuredTeams" style="display: none;">
-            <div class="featured-header">
-                <h2>⭐ 重点关注战队</h2>
-                <button id="manageFeatured" class="btn btn-small">⚙️ 管理关注</button>
-            </div>
-            <div class="featured-teams-grid" id="featuredTeamsGrid">
-                <!-- 动态生成关注的战队卡片 -->
+        <!-- 淘汰赛预测视图 -->
+        <div class="tab-content" id="playoffView">
+            <div class="playoff-prediction">
+                <h2>🏆 淘汰赛预测系统</h2>
+                <div class="playoff-input">
+                    <h3>📋 输入联盟选择表格</h3>
+                    <p class="hint">粘贴从表格复制的联盟选择数据（包括标题行）</p>
+                    <textarea id="allianceInput" placeholder="联盟编号	联盟编号	排名	战队编号	战队名称	排名	战队编号	战队名称&#10;1	联盟1	1	X228841	白狼	24	X228709	渊图&#10;2	联盟2	2	X235583	duck不必	33	X235487	baby无耻"></textarea>
+                    <button id="generatePlayoff" class="btn btn-primary btn-large">🛠️ 生成淘汰赛赛程</button>
+                </div>
+                <div class="playoff-result" id="playoffResult" style="display: none;">
+                    <h3>🎯 淘汰赛赛程及预测结果</h3>
+                    <div id="playoffBracket"></div>
+                </div>
             </div>
         </div>
 
@@ -135,38 +189,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="search-container">
-            <div class="search-box">
-                <input type="text" id="searchInput" class="search-input" placeholder="🔍 搜索战队名称...">
-                <button id="clearSearch" class="btn-clear" style="display: none;">✕</button>
-            </div>
-            <div class="search-result" id="searchResult"></div>
-        </div>
-
-        <div class="table-container">
-            <table id="rankingTable">
-                <thead>
-                    <tr>
-                        <th class="rank-col">排名</th>
-                        <th class="team-col">队伍名称</th>
-                        <th class="number-col sortable" data-sort="wins">胜场 <span class="sort-icon"></span></th>
-                        <th class="number-col sortable" data-sort="losses">负场 <span class="sort-icon"></span></th>
-                        <th class="number-col sortable" data-sort="totalMatches">总场次 <span class="sort-icon"></span></th>
-                        <th class="number-col sortable" data-sort="winRate">胜率 <span class="sort-icon"></span></th>
-                        <th class="score-col sortable active" data-sort="totalWinLossScore">胜负分 <span class="sort-icon">▼</span></th>
-                        <th class="number-col sortable" data-sort="netScore">净胜分 <span class="sort-icon"></span></th>
-                        <th class="number-col sortable" data-sort="totalScore">总分 <span class="sort-icon"></span></th>
-                        <th class="number-col epa-col sortable" data-sort="epa">EPA <span class="sort-icon"></span></th>
-                    </tr>
-                </thead>
-                <tbody id="rankingBody">
-                    <tr>
-                        <td colspan="9" class="no-data">暂无数据，请点击"加载示例数据"</td>
-                    </tr>
-                </tbody>
-            </table>
         </div>
 
         <footer>

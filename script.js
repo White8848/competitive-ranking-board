@@ -95,6 +95,21 @@ function setupEventListeners() {
         quickReadBtn.addEventListener('click', readFromClipboard);
     }
     
+    // 标签页切换
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabName = btn.getAttribute('data-tab');
+            switchTab(tabName);
+        });
+    });
+    
+    // 淘汰赛预测
+    const generatePlayoffBtn = document.getElementById('generatePlayoff');
+    if (generatePlayoffBtn) {
+        generatePlayoffBtn.addEventListener('click', generatePlayoffBracket);
+    }
+    
     // 关注战队管理
     const manageFeaturedBtn = document.getElementById('manageFeatured');
     const featuredModal = document.getElementById('featuredModal');
@@ -223,17 +238,23 @@ function calculateAndDisplayRanking() {
         return;
     }
 
-    // 计算总积分并排序
+    // 计算总积分并排序 - 同时更新teamsData中的EPA数据
     const rankedTeams = teamsData
-        .map(team => ({
-            ...team,
-            totalMatches: team.wins + team.losses,
-            totalWinLossScore: team.points, // 胜负分总和
-            epa: team.matches > 0 ? (team.totalScore / team.matches / 2).toFixed(2) : '0.00', // EPA = 场均总分 / 2
-            winRate: team.wins + team.losses > 0 
-                ? ((team.wins / (team.wins + team.losses)) * 100).toFixed(1)
-                : 0
-        }));
+        .map(team => {
+            // 计算EPA并更新到原始数据
+            const epaValue = team.matches > 0 ? (team.totalScore / team.matches / 2).toFixed(2) : '0.00';
+            team.epa = epaValue; // 更新原始数据中的EPA
+            
+            return {
+                ...team,
+                totalMatches: team.wins + team.losses,
+                totalWinLossScore: team.points, // 胜负分总和
+                epa: epaValue, // EPA = 场均总分 / 2
+                winRate: team.wins + team.losses > 0 
+                    ? ((team.wins / (team.wins + team.losses)) * 100).toFixed(1)
+                    : 0
+            };
+        });
     
     // 根据当前排序字段排序
     sortTeams(rankedTeams);
@@ -1019,4 +1040,233 @@ function parseCSVContent(content) {
     } catch (error) {
         showNotification('CSV解析错误: ' + error.message, 'error');
     }
+}
+
+// ==================== 标签页切换功能 ====================
+
+// 切换标签页
+function switchTab(tabName) {
+    // 更新标签按钮状态
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabName) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    // 切换内容显示
+    const rankingView = document.getElementById('rankingView');
+    const playoffView = document.getElementById('playoffView');
+    
+    if (tabName === 'ranking') {
+        rankingView.classList.add('active');
+        playoffView.classList.remove('active');
+    } else if (tabName === 'playoff') {
+        rankingView.classList.remove('active');
+        playoffView.classList.add('active');
+    }
+}
+
+// ==================== 标签页切换功能 ====================
+
+// 切换标签页
+function switchTab(tabName) {
+    // 更新标签按钮状态
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+        if (btn.getAttribute('data-tab') === tabName) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    
+    // 切换内容显示
+    const rankingView = document.getElementById('rankingView');
+    const playoffView = document.getElementById('playoffView');
+    
+    if (tabName === 'ranking') {
+        rankingView.classList.add('active');
+        playoffView.classList.remove('active');
+    } else if (tabName === 'playoff') {
+        rankingView.classList.remove('active');
+        playoffView.classList.add('active');
+    }
+}
+
+// ==================== 淘汰赛预测功能 ====================
+
+// 解析联盟选择表格并生成淘汰赛
+function generatePlayoffBracket() {
+    const allianceInput = document.getElementById('allianceInput');
+    const text = allianceInput.value.trim();
+    
+    if (!text) {
+        showNotification('请先粘贴联盟选择表格数据', 'error');
+        return;
+    }
+    
+    if (teamsData.length === 0) {
+        showNotification('请先加载战队排名数据', 'error');
+        return;
+    }
+    
+    try {
+        const lines = text.split('\n').filter(line => line.trim());
+        const alliances = [];
+        
+        // 跳过前两行标题
+        for (let i = 2; i < lines.length; i++) {
+            const parts = lines[i].split(/\t/).map(p => p.trim());
+            
+            if (parts.length >= 8) {
+                const allianceNum = parseInt(parts[0]) || alliances.length + 1;
+                const allianceName = parts[1];
+                const team1Name = parts[4];
+                const team2Name = parts[7];
+                
+                // 查找战队EPA
+                const team1Data = findTeamByName(team1Name);
+                const team2Data = findTeamByName(team2Name);
+                
+                const team1EPA = team1Data ? parseFloat(team1Data.epa) : 0;
+                const team2EPA = team2Data ? parseFloat(team2Data.epa) : 0;
+                const totalEPA = team1EPA + team2EPA;
+                
+                alliances.push({
+                    number: allianceNum,
+                    name: allianceName,
+                    team1: team1Name,
+                    team2: team2Name,
+                    team1EPA: team1EPA.toFixed(2),
+                    team2EPA: team2EPA.toFixed(2),
+                    totalEPA: totalEPA.toFixed(2)
+                });
+            }
+        }
+        
+        if (alliances.length === 0) {
+            showNotification('未能解析到联盟数据', 'error');
+            return;
+        }
+        
+        // 生成首尾对战的淘汰赛对阵
+        const matches = generateMatches(alliances);
+        
+        // 显示结果
+        displayPlayoffBracket(matches, alliances);
+        
+        showNotification(`成功生成 ${alliances.length} 个联盟的淘汰赛赛程`, 'success');
+        
+    } catch (error) {
+        showNotification('解析联盟数据错误: ' + error.message, 'error');
+    }
+}
+
+// 根据战队名称查找战队数据
+function findTeamByName(teamName) {
+    return teamsData.find(team => team.team === teamName);
+}
+
+// 生成首尾对战的淘汰赛对阵
+function generateMatches(alliances) {
+    const n = alliances.length;
+    const matches = [];
+    
+    // 首尾对战：1 vs n, 2 vs n-1, 3 vs n-2, ...
+    for (let i = 0; i < Math.floor(n / 2); i++) {
+        const alliance1 = alliances[i];
+        const alliance2 = alliances[n - 1 - i];
+        
+        const epa1 = parseFloat(alliance1.totalEPA);
+        const epa2 = parseFloat(alliance2.totalEPA);
+        
+        // EPA高的预测获胜
+        const winner = epa1 > epa2 ? alliance1 : (epa1 < epa2 ? alliance2 : null);
+        
+        matches.push({
+            matchNum: i + 1,
+            alliance1: alliance1,
+            alliance2: alliance2,
+            winner: winner,
+            epaDiff: Math.abs(epa1 - epa2).toFixed(2)
+        });
+    }
+    
+    return matches;
+}
+
+// 显示淘汰赛赛程和预测结果
+function displayPlayoffBracket(matches, alliances) {
+    const bracketDiv = document.getElementById('playoffBracket');
+    const resultDiv = document.getElementById('playoffResult');
+    
+    let html = '<div class=\"playoff-matches\">';
+    
+    // 显示所有联盟
+    html += '<div class=\"alliances-section\">';
+    html += '<h4>📋 联盟列表</h4>';
+    html += '<div class=\"alliances-grid\">';
+    alliances.forEach(alliance => {
+        html += `
+            <div class="alliance-card">
+                <div class="alliance-header">${alliance.name}</div>
+                <div class="alliance-teams">
+                    <div class="team-info">
+                        <span class="team-name">${escapeHtml(alliance.team1)}</span>
+                        <span class="team-epa">EPA: ${alliance.team1EPA}</span>
+                    </div>
+                    <div class="team-info">
+                        <span class="team-name">${escapeHtml(alliance.team2)}</span>
+                        <span class="team-epa">EPA: ${alliance.team2EPA}</span>
+                    </div>
+                </div>
+                <div class="alliance-total">总EPA: <strong>${alliance.totalEPA}</strong></div>
+            </div>
+        `;
+    });
+    html += '</div></div>';
+    
+    // 显示对阵和预测
+    html += '<div class=\"matches-section\">';
+    html += '<h4>⚔️ 淘汰赛对阵及预测</h4>';
+    matches.forEach(match => {
+        const winnerClass1 = match.winner === match.alliance1 ? 'winner' : 'loser';
+        const winnerClass2 = match.winner === match.alliance2 ? 'winner' : 'loser';
+        const tieMatch = !match.winner;
+        
+        html += `
+            <div class="match-card">
+                <div class="match-header">第${match.matchNum}场</div>
+                <div class="match-content">
+                    <div class="match-alliance ${winnerClass1}">
+                        <div class="alliance-name">${match.alliance1.name}</div>
+                        <div class="alliance-info">
+                            ${escapeHtml(match.alliance1.team1)} & ${escapeHtml(match.alliance1.team2)}
+                        </div>
+                        <div class="alliance-epa">EPA: ${match.alliance1.totalEPA}</div>
+                        ${match.winner === match.alliance1 ? '<div class="win-badge">🏆 预测获胜</div>' : ''}
+                    </div>
+                    <div class="match-vs">VS</div>
+                    <div class="match-alliance ${winnerClass2}">
+                        <div class="alliance-name">${match.alliance2.name}</div>
+                        <div class="alliance-info">
+                            ${escapeHtml(match.alliance2.team1)} & ${escapeHtml(match.alliance2.team2)}
+                        </div>
+                        <div class="alliance-epa">EPA: ${match.alliance2.totalEPA}</div>
+                        ${match.winner === match.alliance2 ? '<div class="win-badge">🏆 预测获胜</div>' : ''}
+                    </div>
+                </div>
+                ${tieMatch ? '<div class="match-tie">⚖️ EPA相同，难分胜负</div>' : `<div class="match-prediction">EPA差距: ${match.epaDiff}</div>`}
+            </div>
+        `;
+    });
+    html += '</div>';
+    
+    html += '</div>';
+    
+    bracketDiv.innerHTML = html;
+    resultDiv.style.display = 'block';
 }
