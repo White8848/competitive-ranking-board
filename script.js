@@ -222,6 +222,7 @@ function calculateAndDisplayRanking() {
             ...team,
             totalMatches: team.wins + team.losses,
             totalWinLossScore: team.points, // 胜负分总和
+            epa: team.matches > 0 ? (team.totalScore / team.matches / 2).toFixed(2) : '0.00', // EPA = 场均总分 / 2
             winRate: team.wins + team.losses > 0 
                 ? ((team.wins / (team.wins + team.losses)) * 100).toFixed(1)
                 : 0
@@ -324,8 +325,8 @@ function updateFeaturedTeams(rankedTeams) {
                         <span class="stat-value">${team.winRate}%</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">总分</span>
-                        <span class="stat-value">${team.totalScore}</span>
+                        <span class="stat-label">EPA</span>
+                        <span class="stat-value" style="color: #667eea; font-weight: 600;">${team.epa}</span>
                     </div>
                 </div>
             `;
@@ -485,6 +486,7 @@ function renderRankingTable(rankedTeams) {
                 <strong>${team.netScore > 0 ? '+' : ''}${team.netScore}</strong>
             </td>
             <td class="number-col">${team.totalScore}</td>
+            <td class="number-col epa-col"><strong>${team.epa}</strong></td>
         `;
 
         // 添加点击事件（整个单元格可点击）
