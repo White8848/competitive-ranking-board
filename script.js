@@ -1203,68 +1203,144 @@ function displayPlayoffBracket(matches, alliances) {
     const bracketDiv = document.getElementById('playoffBracket');
     const resultDiv = document.getElementById('playoffResult');
     
-    let html = '<div class=\"playoff-matches\">';
+    let html = '<div class="bracket-container">';
     
-    // 显示所有联盟
-    html += '<div class=\"alliances-section\">';
-    html += '<h4>📋 联盟列表</h4>';
-    html += '<div class=\"alliances-grid\">';
-    alliances.forEach(alliance => {
-        html += `
-            <div class="alliance-card">
-                <div class="alliance-header">${alliance.name}</div>
-                <div class="alliance-teams">
-                    <div class="team-info">
-                        <span class="team-name">${escapeHtml(alliance.team1)}</span>
-                        <span class="team-epa">EPA: ${alliance.team1EPA}</span>
-                    </div>
-                    <div class="team-info">
-                        <span class="team-name">${escapeHtml(alliance.team2)}</span>
-                        <span class="team-epa">EPA: ${alliance.team2EPA}</span>
-                    </div>
-                </div>
-                <div class="alliance-total">总EPA: <strong>${alliance.totalEPA}</strong></div>
-            </div>
-        `;
-    });
-    html += '</div></div>';
+    // 第一轮：半决赛
+    html += '<div class="bracket-round">';
+    html += '<h4 class="round-title">半决赛</h4>';
+    html += '<div class="round-matches">';
     
-    // 显示对阵和预测
-    html += '<div class=\"matches-section\">';
-    html += '<h4>⚔️ 淘汰赛对阵及预测</h4>';
     matches.forEach(match => {
-        const winnerClass1 = match.winner === match.alliance1 ? 'winner' : 'loser';
-        const winnerClass2 = match.winner === match.alliance2 ? 'winner' : 'loser';
-        const tieMatch = !match.winner;
+        const winner1 = match.winner === match.alliance1;
+        const winner2 = match.winner === match.alliance2;
+        const tie = !match.winner;
         
         html += `
-            <div class="match-card">
-                <div class="match-header">第${match.matchNum}场</div>
-                <div class="match-content">
-                    <div class="match-alliance ${winnerClass1}">
-                        <div class="alliance-name">${match.alliance1.name}</div>
-                        <div class="alliance-info">
-                            ${escapeHtml(match.alliance1.team1)} & ${escapeHtml(match.alliance1.team2)}
+            <div class="bracket-match">
+                <div class="bracket-team ${winner1 ? 'winner' : ''}">
+                    <div class="team-slot">
+                        <span class="team-seed">${match.alliance1.number}</span>
+                        <div class="team-details">
+                            <div class="team-name-bracket">${match.alliance1.name}</div>
+                            <div class="team-members">${escapeHtml(match.alliance1.team1)} & ${escapeHtml(match.alliance1.team2)}</div>
                         </div>
-                        <div class="alliance-epa">EPA: ${match.alliance1.totalEPA}</div>
-                        ${match.winner === match.alliance1 ? '<div class="win-badge">🏆 预测获胜</div>' : ''}
-                    </div>
-                    <div class="match-vs">VS</div>
-                    <div class="match-alliance ${winnerClass2}">
-                        <div class="alliance-name">${match.alliance2.name}</div>
-                        <div class="alliance-info">
-                            ${escapeHtml(match.alliance2.team1)} & ${escapeHtml(match.alliance2.team2)}
-                        </div>
-                        <div class="alliance-epa">EPA: ${match.alliance2.totalEPA}</div>
-                        ${match.winner === match.alliance2 ? '<div class="win-badge">🏆 预测获胜</div>' : ''}
+                        <span class="team-score">${match.alliance1.totalEPA}</span>
                     </div>
                 </div>
-                ${tieMatch ? '<div class="match-tie">⚖️ EPA相同，难分胜负</div>' : `<div class="match-prediction">EPA差距: ${match.epaDiff}</div>`}
+                <div class="bracket-team ${winner2 ? 'winner' : ''}">
+                    <div class="team-slot">
+                        <span class="team-seed">${match.alliance2.number}</span>
+                        <div class="team-details">
+                            <div class="team-name-bracket">${match.alliance2.name}</div>
+                            <div class="team-members">${escapeHtml(match.alliance2.team1)} & ${escapeHtml(match.alliance2.team2)}</div>
+                        </div>
+                        <span class="team-score">${match.alliance2.totalEPA}</span>
+                    </div>
+                </div>
+                ${tie ? '<div class="match-note">⚖️ 势均力敌</div>' : ''}
             </div>
         `;
     });
-    html += '</div>';
     
+    html += '</div></div>';
+    
+    // 第二轮：决赛
+    html += '<div class="bracket-round">';
+    html += '<h4 class="round-title">决赛</h4>';
+    html += '<div class="round-matches">';
+    
+    // 获取两个预测的获胜者进入决赛
+    const finalists = matches
+        .filter(m => m.winner)
+        .map(m => m.winner)
+        .slice(0, 2);
+    
+    if (finalists.length === 2) {
+        const finalist1 = finalists[0];
+        const finalist2 = finalists[1];
+        const epa1 = parseFloat(finalist1.totalEPA);
+        const epa2 = parseFloat(finalist2.totalEPA);
+        const champion = epa1 > epa2 ? finalist1 : (epa1 < epa2 ? finalist2 : null);
+        
+        html += `
+            <div class="bracket-match">
+                <div class="bracket-team ${champion === finalist1 ? 'winner' : ''}">
+                    <div class="team-slot">
+                        <span class="team-seed">${finalist1.number}</span>
+                        <div class="team-details">
+                            <div class="team-name-bracket">${finalist1.name}</div>
+                            <div class="team-members">${escapeHtml(finalist1.team1)} & ${escapeHtml(finalist1.team2)}</div>
+                        </div>
+                        <span class="team-score">${finalist1.totalEPA}</span>
+                    </div>
+                </div>
+                <div class="bracket-team ${champion === finalist2 ? 'winner' : ''}">
+                    <div class="team-slot">
+                        <span class="team-seed">${finalist2.number}</span>
+                        <div class="team-details">
+                            <div class="team-name-bracket">${finalist2.name}</div>
+                            <div class="team-members">${escapeHtml(finalist2.team1)} & ${escapeHtml(finalist2.team2)}</div>
+                        </div>
+                        <span class="team-score">${finalist2.totalEPA}</span>
+                    </div>
+                </div>
+                ${!champion ? '<div class="match-note">⚖️ 势均力敌</div>' : ''}
+            </div>
+        `;
+        
+        // 冠军展示
+        if (champion) {
+            html += '</div></div>';
+            html += '<div class="bracket-round champion-round">';
+            html += '<h4 class="round-title">🏆 冠军</h4>';
+            html += '<div class="round-matches">';
+            html += `
+                <div class="champion-card">
+                    <div class="champion-trophy">🏆</div>
+                    <div class="champion-name">${champion.name}</div>
+                    <div class="champion-teams">${escapeHtml(champion.team1)} & ${escapeHtml(champion.team2)}</div>
+                    <div class="champion-epa">总EPA: ${champion.totalEPA}</div>
+                </div>
+            `;
+        }
+    } else if (finalists.length === 1) {
+        html += `
+            <div class="bracket-match">
+                <div class="bracket-team winner">
+                    <div class="team-slot">
+                        <span class="team-seed">${finalists[0].number}</span>
+                        <div class="team-details">
+                            <div class="team-name-bracket">${finalists[0].name}</div>
+                            <div class="team-members">${escapeHtml(finalists[0].team1)} & ${escapeHtml(finalists[0].team2)}</div>
+                        </div>
+                        <span class="team-score">${finalists[0].totalEPA}</span>
+                    </div>
+                </div>
+                <div class="bracket-team empty">
+                    <div class="team-slot">
+                        <span class="team-details">轮空</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        html += '</div></div>';
+        html += '<div class="bracket-round champion-round">';
+        html += '<h4 class="round-title">🏆 冠军</h4>';
+        html += '<div class="round-matches">';
+        html += `
+            <div class="champion-card">
+                <div class="champion-trophy">🏆</div>
+                <div class="champion-name">${finalists[0].name}</div>
+                <div class="champion-teams">${escapeHtml(finalists[0].team1)} & ${escapeHtml(finalists[0].team2)}</div>
+                <div class="champion-epa">总EPA: ${finalists[0].totalEPA}</div>
+            </div>
+        `;
+    } else {
+        html += '<div class="no-finalist">暂无决赛选手</div>';
+    }
+    
+    html += '</div></div>';
     html += '</div>';
     
     bracketDiv.innerHTML = html;
