@@ -133,6 +133,16 @@ function setupEventListeners() {
         });
     }
     
+    // 搜索功能
+    const searchInput = document.getElementById('searchInput');
+    const clearSearchBtn = document.getElementById('clearSearch');
+    if (searchInput) {
+        searchInput.addEventListener('input', handleSearch);
+    }
+    if (clearSearchBtn) {
+        clearSearchBtn.addEventListener('click', clearSearch);
+    }
+    
     console.log('事件监听器已设置');
     console.log('DOM元素检查:', {
         loadDataBtn: !!loadDataBtn,
@@ -512,6 +522,79 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+// 搜索战队
+function handleSearch(e) {
+    const keyword = e.target.value.trim().toLowerCase();
+    const clearBtn = document.getElementById('clearSearch');
+    const searchResult = document.getElementById('searchResult');
+    const tableRows = document.querySelectorAll('#rankingBody tr');
+    
+    // 显示/隐藏清除按钮
+    if (clearBtn) {
+        clearBtn.style.display = keyword ? 'block' : 'none';
+    }
+    
+    if (!keyword) {
+        // 清空搜索，显示所有行
+        tableRows.forEach(row => {
+            row.style.display = '';
+        });
+        if (searchResult) {
+            searchResult.textContent = '';
+        }
+        return;
+    }
+    
+    // 筛选包含关键词的战队
+    let matchCount = 0;
+    tableRows.forEach(row => {
+        const teamNameCell = row.querySelector('.team-col');
+        if (teamNameCell) {
+            const teamName = teamNameCell.textContent.toLowerCase();
+            if (teamName.includes(keyword)) {
+                row.style.display = '';
+                matchCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    });
+    
+    // 显示搜索结果统计
+    if (searchResult) {
+        if (matchCount > 0) {
+            searchResult.textContent = `找到 ${matchCount} 支战队`;
+            searchResult.className = 'search-result success';
+        } else {
+            searchResult.textContent = '未找到匹配的战队';
+            searchResult.className = 'search-result error';
+        }
+    }
+}
+
+// 清除搜索
+function clearSearch() {
+    const searchInput = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('clearSearch');
+    const searchResult = document.getElementById('searchResult');
+    const tableRows = document.querySelectorAll('#rankingBody tr');
+    
+    if (searchInput) {
+        searchInput.value = '';
+    }
+    if (clearBtn) {
+        clearBtn.style.display = 'none';
+    }
+    if (searchResult) {
+        searchResult.textContent = '';
+    }
+    
+    // 显示所有行
+    tableRows.forEach(row => {
+        row.style.display = '';
+    });
 }
 
 // 从剪贴板快速读取

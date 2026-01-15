@@ -653,6 +653,75 @@ header h1 {
     padding: 20px;
 }
 
+/* 搜索容器 */
+.search-container {
+    padding: 20px 30px;
+    background: white;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.search-box {
+    position: relative;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 45px 12px 15px;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn-clear {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #dc3545;
+    color: white;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-clear:hover {
+    background: #c82333;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.search-result {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9em;
+    min-height: 20px;
+}
+
+.search-result.success {
+    color: #28a745;
+    font-weight: 500;
+}
+
+.search-result.error {
+    color: #dc3545;
+    font-style: italic;
+}
+
 /* 表格容器 */
 .table-container {
     padding: 30px;
