@@ -17,6 +17,10 @@ const sampleData = [
 let teamsData = [];
 let autoRefreshInterval = null;
 let isAutoRefreshEnabled = false;
+// 排序状态
+let currentSortField = 'totalWinLossScore'; // 默认按胜负分排序
+let currentSortOrder = 'desc'; // 'asc' 或 'desc'
+
 let featuredTeamNames = []; // 存储关注的战队名称
 
 // 初始化时加载关注的战队
@@ -143,6 +147,15 @@ function setupEventListeners() {
         clearSearchBtn.addEventListener('click', clearSearch);
     }
     
+    // 表头排序功能
+    const sortableHeaders = document.querySelectorAll('.sortable');
+    sortableHeaders.forEach(header => {
+        header.addEventListener('click', () => {
+            const sortField = header.getAttribute('data-sort');
+            handleSort(sortField);
+        });
+    });
+    
     console.log('事件监听器已设置');
     console.log('DOM元素检查:', {
         loadDataBtn: !!loadDataBtn,
@@ -226,23 +239,10 @@ function calculateAndDisplayRanking() {
             winRate: team.wins + team.losses > 0 
                 ? ((team.wins / (team.wins + team.losses)) * 100).toFixed(1)
                 : 0
-        }))
-        .sort((a, b) => {
-            // 首先按胜负分总和排序
-            if (b.totalWinLossScore !== a.totalWinLossScore) {
-                return b.totalWinLossScore - a.totalWinLossScore;
-            }
-            // 胜负分相同则按净胜分排序
-            if (b.netScore !== a.netScore) {
-                return b.netScore - a.netScore;
-            }
-            // 净胜分相同则按胜场数排序
-            if (b.wins !== a.wins) {
-                return b.wins - a.wins;
-            }
-            // 胜场相同则按总分排序
-            return b.totalScore - a.totalScore;
-        });
+        }));
+    
+    // 根据当前排序字段排序
+    sortTeams(rankedTeams);
 
     // 更新统计数据
     updateStatistics(rankedTeams);
@@ -454,6 +454,77 @@ function removeFeaturedTeam(teamName) {
         
         showNotification(`已移除关注: ${teamName}`, 'info');
     }
+}
+
+// 排序队伍数据
+function sortTeams(teams) {
+    teams.sort((a, b) => {
+        let aValue = a[currentSortField];
+        let bValue = b[currentSortField];
+        
+        // 处理字符串类型的数值（如EPA、胜率）
+        if (typeof aValue === 'string' && !isNaN(aValue)) {
+            aValue = parseFloat(aValue);
+        }
+        if (typeof bValue === 'string' && !isNaN(bValue)) {
+            bValue = parseFloat(bValue);
+        }
+        
+        // 比较
+        if (aValue < bValue) {
+            return currentSortOrder === 'asc' ? -1 : 1;
+        }
+        if (aValue > bValue) {
+            return currentSortOrder === 'asc' ? 1 : -1;
+        }
+        
+        // 相同时按默认排序（胜负分 -> 净胜分 -> 胜场 -> 总分）
+        if (currentSortField !== 'totalWinLossScore' && b.totalWinLossScore !== a.totalWinLossScore) {
+            return b.totalWinLossScore - a.totalWinLossScore;
+        }
+        if (currentSortField !== 'netScore' && b.netScore !== a.netScore) {
+            return b.netScore - a.netScore;
+        }
+        if (currentSortField !== 'wins' && b.wins !== a.wins) {
+            return b.wins - a.wins;
+        }
+        return b.totalScore - a.totalScore;
+    });
+}
+
+// 处理排序点击
+function handleSort(sortField) {
+    // 如果点击同一列，切换升序/降序
+    if (currentSortField === sortField) {
+        currentSortOrder = currentSortOrder === 'desc' ? 'asc' : 'desc';
+    } else {
+        // 点击不同列，默认降序
+        currentSortField = sortField;
+        currentSortOrder = 'desc';
+    }
+    
+    // 更新表头样式
+    updateSortHeaders();
+    
+    // 重新排序并显示
+    calculateAndDisplayRanking();
+}
+
+// 更新表头排序指示器
+function updateSortHeaders() {
+    const headers = document.querySelectorAll('.sortable');
+    headers.forEach(header => {
+        const sortField = header.getAttribute('data-sort');
+        const icon = header.querySelector('.sort-icon');
+        
+        if (sortField === currentSortField) {
+            header.classList.add('active');
+            icon.textContent = currentSortOrder === 'desc' ? '▼' : '▲';
+        } else {
+            header.classList.remove('active');
+            icon.textContent = '';
+        }
+    });
 }
 
 // 渲染排名表格

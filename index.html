@@ -151,14 +151,14 @@
                     <tr>
                         <th class="rank-col">排名</th>
                         <th class="team-col">队伍名称</th>
-                        <th class="number-col">胜场</th>
-                        <th class="number-col">负场</th>
-                        <th class="number-col">总场次</th>
-                        <th class="number-col">胜率</th>
-                        <th class="score-col">胜负分</th>
-                        <th class="number-col">净胜分</th>
-                        <th class="number-col">总分</th>
-                        <th class="number-col epa-col">EPA</th>
+                        <th class="number-col sortable" data-sort="wins">胜场 <span class="sort-icon"></span></th>
+                        <th class="number-col sortable" data-sort="losses">负场 <span class="sort-icon"></span></th>
+                        <th class="number-col sortable" data-sort="totalMatches">总场次 <span class="sort-icon"></span></th>
+                        <th class="number-col sortable" data-sort="winRate">胜率 <span class="sort-icon"></span></th>
+                        <th class="score-col sortable active" data-sort="totalWinLossScore">胜负分 <span class="sort-icon">▼</span></th>
+                        <th class="number-col sortable" data-sort="netScore">净胜分 <span class="sort-icon"></span></th>
+                        <th class="number-col sortable" data-sort="totalScore">总分 <span class="sort-icon"></span></th>
+                        <th class="number-col epa-col sortable" data-sort="epa">EPA <span class="sort-icon"></span></th>
                     </tr>
                 </thead>
                 <tbody id="rankingBody">
