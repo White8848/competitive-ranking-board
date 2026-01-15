@@ -1,27 +1,20 @@
 {
-  "name": "kdocs-data-extractor",
+  "name": "competitive-ranking-board",
   "version": "1.0.0",
-  "description": "Extract data from KDocs (金山文档) shared links using browser automation",
-  "main": "kdocs-puppeteer-example.js",
+  "description": "竞技排行榜 - 实时战队排名系统",
+  "main": "index.html",
   "scripts": {
-    "extract": "node kdocs-puppeteer-example.js",
-    "test": "node kdocs-puppeteer-example.js"
+    "start": "open index.html"
   },
   "keywords": [
-    "kdocs",
-    "wps",
-    "data-extraction",
-    "web-scraping",
-    "puppeteer",
-    "automation"
+    "ranking",
+    "leaderboard",
+    "competition",
+    "sports",
+    "esports",
+    "team-ranking",
+    "real-time"
   ],
   "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "puppeteer": "^21.0.0"
-  },
-  "devDependencies": {},
-  "engines": {
-    "node": ">=16.0.0"
-  }
+  "license": "MIT"
 }

@@ -188,6 +188,50 @@ function updateStatistics(rankedTeams) {
     document.getElementById('totalTeams').textContent = totalTeams;
     document.getElementById('totalMatches').textContent = totalMatches;
     document.getElementById('avgScore').textContent = avgScore;
+    
+    // 更新重点关注战队
+    updateFeaturedTeams(rankedTeams);
+}
+
+// 更新重点关注战队的显示
+function updateFeaturedTeams(rankedTeams) {
+    const featuredTeamsContainer = document.getElementById('featuredTeams');
+    const featuredTeamNames = ['星河战魂', '幻影战翼'];
+    
+    let foundAny = false;
+    
+    featuredTeamNames.forEach(teamName => {
+        const team = rankedTeams.find(t => t.team === teamName);
+        const teamId = teamName === '星河战魂' ? 'xinghezhanho' : 'huanyingzhanyi';
+        
+        if (team) {
+            foundAny = true;
+            const rank = rankedTeams.indexOf(team) + 1;
+            
+            // 更新数据
+            document.getElementById(`rank-${teamId}`).textContent = rank;
+            document.getElementById(`points-${teamId}`).textContent = team.totalWinLossScore;
+            document.getElementById(`net-${teamId}`).textContent = team.netScore > 0 ? `+${team.netScore}` : team.netScore;
+            document.getElementById(`wins-${teamId}`).textContent = team.wins;
+            document.getElementById(`losses-${teamId}`).textContent = team.losses;
+            document.getElementById(`winrate-${teamId}`).textContent = team.winRate + '%';
+            document.getElementById(`total-${teamId}`).textContent = team.totalScore;
+            
+            // 净胜分颜色
+            const netElement = document.getElementById(`net-${teamId}`);
+            netElement.style.color = team.netScore >= 0 ? '#28a745' : '#dc3545';
+            
+            // 排名颜色
+            const rankElement = document.getElementById(`rank-${teamId}`);
+            if (rank === 1) rankElement.style.color = '#ffd700';
+            else if (rank === 2) rankElement.style.color = '#c0c0c0';
+            else if (rank === 3) rankElement.style.color = '#cd7f32';
+            else rankElement.style.color = '#667eea';
+        }
+    });
+    
+    // 显示或隐藏重点关注区域
+    featuredTeamsContainer.style.display = foundAny ? 'block' : 'none';
 }
 
 // 渲染排名表格

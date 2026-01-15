@@ -348,6 +348,110 @@ header h1 {
     font-size: 0.95em;
 }
 
+/* 重点关注战队 */
+.featured-teams {
+    padding: 30px;
+    background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+    border-top: 3px solid #667eea;
+    border-bottom: 3px solid #667eea;
+}
+
+.featured-teams h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+.featured-teams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.featured-team-card {
+    background: white;
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    border: 3px solid #667eea;
+}
+
+.featured-team-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.3);
+}
+
+.featured-team-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.featured-team-header h3 {
+    font-size: 1.5em;
+    color: #667eea;
+    margin: 0;
+}
+
+.featured-rank {
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.featured-rank span {
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+.featured-team-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.featured-team-stats .stat-item {
+    background: #f8f9fa;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.featured-team-stats .stat-label {
+    display: block;
+    font-size: 0.85em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.featured-team-stats .stat-value {
+    display: block;
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #333;
+}
+
+.featured-team-stats .stat-value.highlight {
+    color: #667eea;
+    font-size: 2.2em;
+}
+
+@media (max-width: 768px) {
+    .featured-teams-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .featured-team-stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 /* 表格容器 */
 .table-container {
     padding: 30px;

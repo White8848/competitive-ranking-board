@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>比赛队伍排名系统</title>
+    <title>竞技排行榜 - 实时战队排名系统</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🏆 比赛队伍排名</h1>
-            <p class="subtitle">基于胜负分总和排名</p>
+            <h1>🏆 竞技排行榜</h1>
+            <p class="subtitle">实时战队排名 · 基于胜负分与净胜分综合排序</p>
         </header>
 
         <div class="controls">
@@ -97,6 +97,76 @@
             <div class="stat-card">
                 <div class="stat-value" id="avgScore">0</div>
                 <div class="stat-label">平均积分</div>
+            </div>
+        </div>
+
+        <div class="featured-teams" id="featuredTeams" style="display: none;">
+            <h2>⭐ 重点关注战队</h2>
+            <div class="featured-teams-grid">
+                <div class="featured-team-card" id="team-xinghezhanho">
+                    <div class="featured-team-header">
+                        <h3>🌟 星河战魂</h3>
+                        <div class="featured-rank">排名: <span id="rank-xinghezhanho">-</span></div>
+                    </div>
+                    <div class="featured-team-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">胜负分</span>
+                            <span class="stat-value highlight" id="points-xinghezhanho">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">净胜分</span>
+                            <span class="stat-value" id="net-xinghezhanho">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">胜场</span>
+                            <span class="stat-value" id="wins-xinghezhanho">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">负场</span>
+                            <span class="stat-value" id="losses-xinghezhanho">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">胜率</span>
+                            <span class="stat-value" id="winrate-xinghezhanho">0%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">总分</span>
+                            <span class="stat-value" id="total-xinghezhanho">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="featured-team-card" id="team-huanyingzhanyi">
+                    <div class="featured-team-header">
+                        <h3>👻 幻影战翼</h3>
+                        <div class="featured-rank">排名: <span id="rank-huanyingzhanyi">-</span></div>
+                    </div>
+                    <div class="featured-team-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">胜负分</span>
+                            <span class="stat-value highlight" id="points-huanyingzhanyi">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">净胜分</span>
+                            <span class="stat-value" id="net-huanyingzhanyi">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">胜场</span>
+                            <span class="stat-value" id="wins-huanyingzhanyi">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">负场</span>
+                            <span class="stat-value" id="losses-huanyingzhanyi">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">胜率</span>
+                            <span class="stat-value" id="winrate-huanyingzhanyi">0%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">总分</span>
+                            <span class="stat-value" id="total-huanyingzhanyi">0</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
