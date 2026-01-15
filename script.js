@@ -17,6 +17,26 @@ const sampleData = [
 let teamsData = [];
 let autoRefreshInterval = null;
 let isAutoRefreshEnabled = false;
+let featuredTeamNames = []; // 存储关注的战队名称
+
+// 初始化时加载关注的战队
+function loadFeaturedTeams() {
+    const saved = localStorage.getItem('featuredTeams');
+    if (saved) {
+        try {
+            featuredTeamNames = JSON.parse(saved);
+        } catch (e) {
+            featuredTeamNames = ['星河战魂', '幻影战翼']; // 默认
+        }
+    } else {
+        featuredTeamNames = ['星河战魂', '幻影战翼']; // 默认
+    }
+}
+
+// 保存关注的战队
+function saveFeaturedTeams() {
+    localStorage.setItem('featuredTeams', JSON.stringify(featuredTeamNames));
+}
 
 // DOM元素
 const loadDataBtn = document.getElementById('loadData');
@@ -36,6 +56,7 @@ const lastUpdateSpan = document.getElementById('lastUpdate');
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
+    loadFeaturedTeams();
     setupEventListeners();
 });
 
@@ -68,6 +89,48 @@ function setupEventListeners() {
     }
     if (quickReadBtn) {
         quickReadBtn.addEventListener('click', readFromClipboard);
+    }
+    
+    // 关注战队管理
+    const manageFeaturedBtn = document.getElementById('manageFeatured');
+    const featuredModal = document.getElementById('featuredModal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const addFeaturedBtn = document.getElementById('addFeatured');
+    
+    if (manageFeaturedBtn) {
+        manageFeaturedBtn.addEventListener('click', () => {
+            updateTeamSelector();
+            updateFeaturedList();
+            featuredModal.style.display = 'flex';
+        });
+    }
+    
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            featuredModal.style.display = 'none';
+        });
+    }
+    
+    if (featuredModal) {
+        featuredModal.addEventListener('click', (e) => {
+            if (e.target === featuredModal) {
+                featuredModal.style.display = 'none';
+            }
+        });
+    }
+    
+    if (addFeaturedBtn) {
+        addFeaturedBtn.addEventListener('click', addFeaturedTeam);
+    }
+    
+    // 输入框回车键添加
+    const teamInput = document.getElementById('teamInput');
+    if (teamInput) {
+        teamInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addFeaturedTeam();
+            }
+        });
     }
     
     console.log('事件监听器已设置');
@@ -196,42 +259,165 @@ function updateStatistics(rankedTeams) {
 // 更新重点关注战队的显示
 function updateFeaturedTeams(rankedTeams) {
     const featuredTeamsContainer = document.getElementById('featuredTeams');
-    const featuredTeamNames = ['星河战魂', '幻影战翼'];
+    const featuredTeamsGrid = document.getElementById('featuredTeamsGrid');
+    
+    if (!featuredTeamsContainer || !featuredTeamsGrid) return;
+    
+    // 清空现有卡片
+    featuredTeamsGrid.innerHTML = '';
     
     let foundAny = false;
     
     featuredTeamNames.forEach(teamName => {
         const team = rankedTeams.find(t => t.team === teamName);
-        const teamId = teamName === '星河战魂' ? 'xinghezhanho' : 'huanyingzhanyi';
         
         if (team) {
             foundAny = true;
             const rank = rankedTeams.indexOf(team) + 1;
             
-            // 更新数据
-            document.getElementById(`rank-${teamId}`).textContent = rank;
-            document.getElementById(`points-${teamId}`).textContent = team.totalWinLossScore;
-            document.getElementById(`net-${teamId}`).textContent = team.netScore > 0 ? `+${team.netScore}` : team.netScore;
-            document.getElementById(`wins-${teamId}`).textContent = team.wins;
-            document.getElementById(`losses-${teamId}`).textContent = team.losses;
-            document.getElementById(`winrate-${teamId}`).textContent = team.winRate + '%';
-            document.getElementById(`total-${teamId}`).textContent = team.totalScore;
+            // 创建卡片
+            const card = document.createElement('div');
+            card.className = 'featured-team-card';
             
-            // 净胜分颜色
-            const netElement = document.getElementById(`net-${teamId}`);
-            netElement.style.color = team.netScore >= 0 ? '#28a745' : '#dc3545';
+            let rankColor = '#667eea';
+            if (rank === 1) rankColor = '#ffd700';
+            else if (rank === 2) rankColor = '#c0c0c0';
+            else if (rank === 3) rankColor = '#cd7f32';
             
-            // 排名颜色
-            const rankElement = document.getElementById(`rank-${teamId}`);
-            if (rank === 1) rankElement.style.color = '#ffd700';
-            else if (rank === 2) rankElement.style.color = '#c0c0c0';
-            else if (rank === 3) rankElement.style.color = '#cd7f32';
-            else rankElement.style.color = '#667eea';
+            const netScoreColor = team.netScore >= 0 ? '#28a745' : '#dc3545';
+            const netScoreText = team.netScore > 0 ? `+${team.netScore}` : team.netScore;
+            
+            card.innerHTML = `
+                <div class="featured-team-header">
+                    <h3>🌟 ${escapeHtml(teamName)}</h3>
+                    <div class="featured-rank" style="color: ${rankColor}">排名: <span>${rank}</span></div>
+                </div>
+                <div class="featured-team-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">胜负分</span>
+                        <span class="stat-value highlight">${team.totalWinLossScore}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">净胜分</span>
+                        <span class="stat-value" style="color: ${netScoreColor}">${netScoreText}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">胜场</span>
+                        <span class="stat-value">${team.wins}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">负场</span>
+                        <span class="stat-value">${team.losses}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">胜率</span>
+                        <span class="stat-value">${team.winRate}%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">总分</span>
+                        <span class="stat-value">${team.totalScore}</span>
+                    </div>
+                </div>
+            `;
+            
+            featuredTeamsGrid.appendChild(card);
         }
     });
     
     // 显示或隐藏重点关注区域
     featuredTeamsContainer.style.display = foundAny ? 'block' : 'none';
+}
+
+// 更新战队建议列表
+function updateTeamSelector() {
+    const datalist = document.getElementById('teamSuggestions');
+    if (!datalist) return;
+    
+    // 清空现有选项
+    datalist.innerHTML = '';
+    
+    // 添加所有战队作为建议
+    teamsData.forEach(team => {
+        const option = document.createElement('option');
+        option.value = team.team;
+        datalist.appendChild(option);
+    });
+}
+
+// 更新关注列表
+function updateFeaturedList() {
+    const list = document.getElementById('featuredList');
+    if (!list) return;
+    
+    list.innerHTML = '';
+    
+    if (featuredTeamNames.length === 0) {
+        list.innerHTML = '<li class="empty-message">暂无关注的战队</li>';
+        return;
+    }
+    
+    featuredTeamNames.forEach(teamName => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span class="team-name">${escapeHtml(teamName)}</span>
+            <button class="btn-remove" data-team="${escapeHtml(teamName)}">×</button>
+        `;
+        
+        const removeBtn = li.querySelector('.btn-remove');
+        removeBtn.addEventListener('click', () => removeFeaturedTeam(teamName));
+        
+        list.appendChild(li);
+    });
+}
+
+// 添加关注战队
+function addFeaturedTeam() {
+    const input = document.getElementById('teamInput');
+    const teamName = input.value.trim();
+    
+    if (!teamName) {
+        showNotification('请输入战队名称', 'error');
+        return;
+    }
+    
+    if (featuredTeamNames.includes(teamName)) {
+        showNotification('该战队已在关注列表中', 'error');
+        return;
+    }
+    
+    featuredTeamNames.push(teamName);
+    saveFeaturedTeams();
+    updateTeamSelector();
+    updateFeaturedList();
+    
+    // 刷新显示
+    if (teamsData.length > 0) {
+        calculateAndDisplayRanking();
+    }
+    
+    showNotification(`已添加关注: ${teamName}`, 'success');
+    
+    // 清空输入框并获得焦点
+    input.value = '';
+    input.focus();
+}
+
+// 移除关注战队
+function removeFeaturedTeam(teamName) {
+    const index = featuredTeamNames.indexOf(teamName);
+    if (index > -1) {
+        featuredTeamNames.splice(index, 1);
+        saveFeaturedTeams();
+        updateTeamSelector();
+        updateFeaturedList();
+        
+        // 刷新显示
+        if (teamsData.length > 0) {
+            calculateAndDisplayRanking();
+        }
+        
+        showNotification(`已移除关注: ${teamName}`, 'info');
+    }
 }
 
 // 渲染排名表格

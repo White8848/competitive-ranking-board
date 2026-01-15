@@ -101,70 +101,37 @@
         </div>
 
         <div class="featured-teams" id="featuredTeams" style="display: none;">
-            <h2>⭐ 重点关注战队</h2>
-            <div class="featured-teams-grid">
-                <div class="featured-team-card" id="team-xinghezhanho">
-                    <div class="featured-team-header">
-                        <h3>🌟 星河战魂</h3>
-                        <div class="featured-rank">排名: <span id="rank-xinghezhanho">-</span></div>
-                    </div>
-                    <div class="featured-team-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">胜负分</span>
-                            <span class="stat-value highlight" id="points-xinghezhanho">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">净胜分</span>
-                            <span class="stat-value" id="net-xinghezhanho">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">胜场</span>
-                            <span class="stat-value" id="wins-xinghezhanho">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">负场</span>
-                            <span class="stat-value" id="losses-xinghezhanho">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">胜率</span>
-                            <span class="stat-value" id="winrate-xinghezhanho">0%</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">总分</span>
-                            <span class="stat-value" id="total-xinghezhanho">0</span>
-                        </div>
-                    </div>
+            <div class="featured-header">
+                <h2>⭐ 重点关注战队</h2>
+                <button id="manageFeatured" class="btn btn-small">⚙️ 管理关注</button>
+            </div>
+            <div class="featured-teams-grid" id="featuredTeamsGrid">
+                <!-- 动态生成关注的战队卡片 -->
+            </div>
+        </div>
+
+        <!-- 关注战队管理弹窗 -->
+        <div class="modal" id="featuredModal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>🎯 管理关注战队</h3>
+                    <button class="modal-close" id="closeModal">×</button>
                 </div>
-                <div class="featured-team-card" id="team-huanyingzhanyi">
-                    <div class="featured-team-header">
-                        <h3>👻 幻影战翼</h3>
-                        <div class="featured-rank">排名: <span id="rank-huanyingzhanyi">-</span></div>
+                <div class="modal-body">
+                    <div class="add-featured-section">
+                        <h4>添加关注战队</h4>
+                        <div class="add-featured-controls">
+                            <input type="text" id="teamInput" class="team-input" placeholder="输入战队名称..." list="teamSuggestions">
+                            <datalist id="teamSuggestions"></datalist>
+                            <button id="addFeatured" class="btn btn-primary">➕ 添加</button>
+                        </div>
+                        <div class="input-hint">提示：可以手动输入任意战队名称</div>
                     </div>
-                    <div class="featured-team-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">胜负分</span>
-                            <span class="stat-value highlight" id="points-huanyingzhanyi">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">净胜分</span>
-                            <span class="stat-value" id="net-huanyingzhanyi">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">胜场</span>
-                            <span class="stat-value" id="wins-huanyingzhanyi">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">负场</span>
-                            <span class="stat-value" id="losses-huanyingzhanyi">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">胜率</span>
-                            <span class="stat-value" id="winrate-huanyingzhanyi">0%</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">总分</span>
-                            <span class="stat-value" id="total-huanyingzhanyi">0</span>
-                        </div>
+                    <div class="featured-list-section">
+                        <h4>已关注的战队</h4>
+                        <ul id="featuredList" class="featured-list">
+                            <!-- 动态生成 -->
+                        </ul>
                     </div>
                 </div>
             </div>
