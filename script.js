@@ -380,6 +380,31 @@ function updateFeaturedList() {
     });
 }
 
+// 快速添加/取消关注战队（从排行榜点击）
+function quickAddFeaturedTeam(teamName) {
+    if (!teamName) return;
+    
+    // 如果已关注，则取消关注
+    if (featuredTeamNames.includes(teamName)) {
+        removeFeaturedTeam(teamName);
+        showNotification(`❌ 已取消关注: ${teamName}`, 'info');
+        return;
+    }
+    
+    // 添加关注
+    featuredTeamNames.push(teamName);
+    saveFeaturedTeams();
+    updateTeamSelector();
+    updateFeaturedList();
+    
+    // 刷新显示
+    if (teamsData.length > 0) {
+        calculateAndDisplayRanking();
+    }
+    
+    showNotification(`⭐ 已添加关注: ${teamName}`, 'success');
+}
+
 // 添加关注战队
 function addFeaturedTeam() {
     const input = document.getElementById('teamInput');
@@ -447,7 +472,10 @@ function renderRankingTable(rankedTeams) {
             <td class="rank-col">
                 ${rank <= 3 ? getMedalEmoji(rank) : rank}
             </td>
-            <td class="team-col">${escapeHtml(team.team)}</td>
+            <td class="team-col team-clickable" data-team="${escapeHtml(team.team)}" title="${featuredTeamNames.includes(team.team) ? '点击取消关注' : '点击添加到关注列表'}">
+                ${escapeHtml(team.team)}
+                ${featuredTeamNames.includes(team.team) ? '<span class="featured-badge">⭐</span>' : ''}
+            </td>
             <td class="number-col">${team.wins}</td>
             <td class="number-col">${team.losses}</td>
             <td class="number-col">${team.totalMatches}</td>
@@ -459,6 +487,15 @@ function renderRankingTable(rankedTeams) {
             <td class="number-col">${team.totalScore}</td>
         `;
 
+        // 添加点击事件（整个单元格可点击）
+        const teamCell = row.querySelector('.team-clickable');
+        if (teamCell) {
+            teamCell.addEventListener('click', () => {
+                const teamName = teamCell.getAttribute('data-team');
+                quickAddFeaturedTeam(teamName);
+            });
+        }
+        
         rankingBody.appendChild(row);
     });
 }
