@@ -63,3 +63,28 @@ body {
 input, button, select, textarea {
   font-family: inherit;
 }
+
+/* Mobile touch optimization */
+@media (max-width: 768px) {
+  button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prevent iOS auto-zoom on input focus */
+  input, select, textarea {
+    font-size: 16px;
+  }
+
+  /* Disable hover effects on touch devices */
+  @media (hover: none) {
+    *:hover {
+      transform: none !important;
+    }
+  }
+
+  /* Improve scrolling performance */
+  .overflow-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+}

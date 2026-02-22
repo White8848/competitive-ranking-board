@@ -253,22 +253,97 @@
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding: 20px 12px;
+  }
+  .container h2 {
+    font-size: 1.4em;
+    margin-bottom: 20px;
+  }
+  .inputSection h3,
+  .result h3 {
+    font-size: 1.1em;
+  }
   .bracket {
-    gap: 24px;
+    gap: 20px;
+    padding: 16px 8px;
   }
   .round {
-    min-width: 240px;
+    min-width: 220px;
   }
   .roundMatches {
     gap: 32px;
   }
+  .teamSlot {
+    padding: 8px 10px;
+  }
   .championCard {
     padding: 28px 20px;
+  }
+  .championRound {
+    min-width: 240px;
   }
   .trophy {
     font-size: 2.8em;
   }
   .championName {
     font-size: 1.3em;
+  }
+  .generateBtn {
+    width: 100%;
+    min-height: 44px;
+  }
+  .textarea {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px 8px;
+    min-height: 400px;
+  }
+  .container h2 {
+    font-size: 1.2em;
+  }
+  .bracket {
+    gap: 16px;
+    padding: 12px 4px;
+  }
+  .round {
+    min-width: 200px;
+  }
+  .roundTitle {
+    font-size: 0.95em;
+  }
+  .teamName {
+    font-size: 0.88em;
+  }
+  .members {
+    font-size: 0.75em;
+  }
+  .seed {
+    font-size: 0.88em;
+    min-width: 20px;
+  }
+  .score {
+    font-size: 0.88em;
+    min-width: 36px;
+  }
+  .championRound {
+    min-width: 200px;
+  }
+  .championCard {
+    padding: 20px 14px;
+  }
+  .trophy {
+    font-size: 2.2em;
+  }
+  .championName {
+    font-size: 1.1em;
+  }
+  .championEpa {
+    font-size: 0.9em;
+    padding: 6px 14px;
   }
 }

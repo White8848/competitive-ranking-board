@@ -42,3 +42,12 @@
     border-radius: 12px;
   }
 }
+
+@media (max-width: 480px) {
+  .app {
+    padding: 4px;
+  }
+  .container {
+    border-radius: 8px;
+  }
+}

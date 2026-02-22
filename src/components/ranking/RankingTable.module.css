@@ -162,9 +162,50 @@
 @media (max-width: 768px) {
   .container {
     padding: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .table {
+    min-width: 560px;
   }
   .table th, .table td {
     padding: 8px 6px;
     font-size: 0.82em;
+  }
+  .rankCol {
+    width: 50px;
+  }
+  .numberCol {
+    width: 65px;
+  }
+  .scoreCol {
+    width: 80px;
+  }
+  .epaCol {
+    width: 65px;
+  }
+  .teamCol {
+    min-width: 100px;
+  }
+  .rank1 .rankCol,
+  .rank2 .rankCol,
+  .rank3 .rankCol {
+    font-size: 1.1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 8px;
+  }
+  .table th, .table td {
+    padding: 6px 4px;
+    font-size: 0.78em;
+  }
+  .table th {
+    letter-spacing: 0;
+  }
+  .noData {
+    padding: 32px 16px;
   }
 }

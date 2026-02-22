@@ -76,3 +76,39 @@
   max-height: calc(80vh - 70px);
   overflow-y: auto;
 }
+
+@media (max-width: 768px) {
+  .content {
+    width: 95%;
+    max-height: 85vh;
+  }
+  .header {
+    padding: 14px 16px;
+  }
+  .header h3 {
+    font-size: 1.05em;
+  }
+  .close {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+  .body {
+    padding: 16px;
+    max-height: calc(85vh - 56px);
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    width: 100%;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    max-width: none;
+    max-height: 90vh;
+    align-self: flex-end;
+  }
+  .body {
+    padding: 16px 12px;
+    max-height: calc(90vh - 56px);
+  }
+}

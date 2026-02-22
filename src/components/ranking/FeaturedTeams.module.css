@@ -229,10 +229,59 @@
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  .header h2 {
+    font-size: 1.2em;
+  }
   .grid {
     grid-template-columns: 1fr;
   }
+  .card {
+    padding: 16px;
+  }
+  .cardHeader h3 {
+    font-size: 1.1em;
+  }
   .stats {
     grid-template-columns: repeat(3, 1fr);
+  }
+  .statValue {
+    font-size: 1.3em;
+  }
+  .manageBtn {
+    min-height: 44px;
+    padding: 8px 14px;
+  }
+  .removeBtn {
+    width: 32px;
+    height: 32px;
+  }
+  .addBtn {
+    min-height: 44px;
+  }
+  .teamInput {
+    min-height: 44px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .statItem {
+    padding: 8px;
+  }
+  .statValue {
+    font-size: 1.1em;
+  }
+  .statLabel {
+    font-size: 0.75em;
   }
 }

@@ -52,3 +52,15 @@
     font-size: 0.9em;
   }
 }
+
+@media (max-width: 480px) {
+  .header {
+    padding: 24px 16px 20px;
+  }
+  .header h1 {
+    font-size: 1.5em;
+  }
+  .subtitle {
+    font-size: 0.82em;
+  }
+}

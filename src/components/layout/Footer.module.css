@@ -24,3 +24,17 @@
   font-size: 0.85em;
   color: var(--gray-400);
 }
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 16px;
+    font-size: 0.82em;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 12px;
+    font-size: 0.78em;
+  }
+}

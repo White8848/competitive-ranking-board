@@ -237,6 +237,9 @@
 }
 
 @media (max-width: 768px) {
+  .controls {
+    padding: 16px;
+  }
   .topRow {
     flex-direction: column;
     align-items: stretch;
@@ -250,5 +253,45 @@
   }
   .sourceSelect {
     justify-content: center;
+  }
+  .btn {
+    padding: 10px 16px;
+    font-size: 0.85em;
+    min-height: 44px;
+  }
+  .urlInput {
+    font-size: 16px;
+  }
+  .select {
+    min-height: 44px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .controls {
+    padding: 12px;
+  }
+  .actions {
+    flex-direction: column;
+  }
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .urlInputGroup {
+    flex-direction: column;
+  }
+  .urlIcon {
+    display: none;
+  }
+  .fetchBtn {
+    border-radius: var(--radius-md);
+    min-height: 44px;
+  }
+  .autoRefresh {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
   }
 }

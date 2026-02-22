@@ -41,7 +41,30 @@
 
 @media (max-width: 768px) {
   .summary {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
     padding: 16px;
+  }
+  .card {
+    padding: 16px 12px;
+  }
+  .value {
+    font-size: 2em;
+  }
+  .label {
+    font-size: 0.82em;
+  }
+}
+
+@media (max-width: 480px) {
+  .summary {
+    padding: 12px;
+    gap: 8px;
+  }
+  .card {
+    padding: 12px 8px;
+  }
+  .value {
+    font-size: 1.6em;
   }
 }
