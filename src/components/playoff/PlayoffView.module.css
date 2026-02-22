@@ -1,0 +1,349 @@
+.container {
+  padding: 32px 24px;
+  background: white;
+  min-height: 600px;
+}
+
+.container h2 {
+  color: var(--gray-800);
+  font-size: 1.8em;
+  margin-bottom: 28px;
+  text-align: center;
+  font-weight: 800;
+}
+
+.inputSection h3,
+.result h3 {
+  color: var(--primary);
+  margin-bottom: 16px;
+  font-size: 1.3em;
+  font-weight: 700;
+}
+
+.hint {
+  color: var(--gray-500);
+  font-size: 0.88em;
+  margin-bottom: 12px;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  font-family: 'Courier New', monospace;
+  font-size: 0.88em;
+  margin-bottom: 16px;
+  resize: vertical;
+  box-sizing: border-box;
+  color: var(--gray-700);
+  transition: border-color var(--transition-fast);
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.08);
+}
+
+.generateBtn {
+  padding: 12px 32px;
+  font-size: 1em;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--transition-base);
+}
+
+.generateBtn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.result {
+  margin-top: 28px;
+}
+
+.bracket {
+  display: flex;
+  gap: 36px;
+  padding: 24px 16px;
+  overflow-x: auto;
+  min-height: 400px;
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 280px;
+}
+
+.roundTitle {
+  text-align: center;
+  font-size: 1.1em;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+}
+
+.roundMatches {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  flex: 1;
+  justify-content: center;
+}
+
+.match {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.team {
+  background: white;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  position: relative;
+}
+
+.team:hover {
+  transform: translateX(4px);
+  box-shadow: var(--shadow-md);
+}
+
+.winner {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.04) 0%, white 100%);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+.winner::before {
+  content: '\2713';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.teamSlot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+}
+
+.seed {
+  font-weight: 700;
+  font-size: 1em;
+  color: var(--primary);
+  min-width: 24px;
+  text-align: center;
+}
+
+.details {
+  flex: 1;
+  min-width: 0;
+}
+
+.teamName {
+  font-weight: 700;
+  font-size: 0.95em;
+  color: var(--gray-800);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.members {
+  font-size: 0.8em;
+  color: var(--gray-500);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.score {
+  font-weight: 700;
+  font-size: 1em;
+  color: var(--secondary);
+  min-width: 48px;
+  text-align: right;
+}
+
+.matchNote {
+  text-align: center;
+  font-size: 0.85em;
+  color: var(--gray-500);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* Champion */
+.championRound {
+  min-width: 300px;
+}
+
+.championCard {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%);
+  color: white;
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.35);
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 10px 30px rgba(99, 102, 241, 0.35); }
+  50% { box-shadow: 0 10px 40px rgba(99, 102, 241, 0.55), 0 0 24px rgba(139, 92, 246, 0.3); }
+}
+
+.trophy {
+  font-size: 3.5em;
+  margin-bottom: 12px;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.championName {
+  font-size: 1.6em;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.championTeams {
+  font-size: 1em;
+  margin-bottom: 12px;
+  opacity: 0.9;
+}
+
+.championEpa {
+  font-size: 1.1em;
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  display: inline-block;
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px 12px;
+  }
+  .container h2 {
+    font-size: 1.4em;
+    margin-bottom: 20px;
+  }
+  .inputSection h3,
+  .result h3 {
+    font-size: 1.1em;
+  }
+  .bracket {
+    gap: 20px;
+    padding: 16px 8px;
+  }
+  .round {
+    min-width: 220px;
+  }
+  .roundMatches {
+    gap: 32px;
+  }
+  .teamSlot {
+    padding: 8px 10px;
+  }
+  .championCard {
+    padding: 28px 20px;
+  }
+  .championRound {
+    min-width: 240px;
+  }
+  .trophy {
+    font-size: 2.8em;
+  }
+  .championName {
+    font-size: 1.3em;
+  }
+  .generateBtn {
+    width: 100%;
+    min-height: 44px;
+  }
+  .textarea {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 16px 8px;
+    min-height: 400px;
+  }
+  .container h2 {
+    font-size: 1.2em;
+  }
+  .bracket {
+    gap: 16px;
+    padding: 12px 4px;
+  }
+  .round {
+    min-width: 200px;
+  }
+  .roundTitle {
+    font-size: 0.95em;
+  }
+  .teamName {
+    font-size: 0.88em;
+  }
+  .members {
+    font-size: 0.75em;
+  }
+  .seed {
+    font-size: 0.88em;
+    min-width: 20px;
+  }
+  .score {
+    font-size: 0.88em;
+    min-width: 36px;
+  }
+  .championRound {
+    min-width: 200px;
+  }
+  .championCard {
+    padding: 20px 14px;
+  }
+  .trophy {
+    font-size: 2.2em;
+  }
+  .championName {
+    font-size: 1.1em;
+  }
+  .championEpa {
+    font-size: 0.9em;
+    padding: 6px 14px;
+  }
+}

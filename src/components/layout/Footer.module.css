@@ -1,0 +1,40 @@
+.footer {
+  padding: 24px 30px;
+  background: var(--gray-50);
+  text-align: center;
+  color: var(--gray-500);
+  border-top: 1px solid var(--gray-200);
+  font-size: 0.9em;
+}
+
+.footer a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.footer a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.lastUpdate {
+  margin-top: 6px;
+  font-size: 0.85em;
+  color: var(--gray-400);
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 16px;
+    font-size: 0.82em;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 12px;
+    font-size: 0.78em;
+  }
+}

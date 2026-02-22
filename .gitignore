@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-package-lock.json
 __pycache__/
 *.pyc
 *.pyo
@@ -9,6 +8,9 @@ __pycache__/
 env/
 venv/
 ENV/
+
+# Build output
+dist/
 
 # Credentials (NEVER commit these!)
 .env
@@ -55,3 +57,6 @@ desktop.ini
 temp/
 tmp/
 *.tmp
+
+# Claude Code task logs (local work state)
+.claude/task-log/
