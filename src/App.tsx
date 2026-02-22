@@ -3,6 +3,7 @@ import type { TeamRaw, TeamRanked, SortField, SortOrder, DataSource, TabName } f
 import { sampleData } from './data/sampleData';
 import { parseTableData, parseCSVData, parseCSVFileContent } from './utils/dataParser';
 import { calculateRanking, sortTeams } from './utils/rankingAlgorithm';
+import { fetchKDocsData } from './utils/kdocsFetcher';
 import { useNotification } from './hooks/useNotification';
 import { useFeaturedTeams } from './hooks/useFeaturedTeams';
 import { useAutoRefresh } from './hooks/useAutoRefresh';
@@ -36,10 +37,12 @@ export default function App() {
   const [teamsData, setTeamsData] = useState<TeamRaw[]>([]);
   const [sortField, setSortField] = useState<SortField>('totalWinLossScore');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
-  const [dataSource, setDataSource] = useState<DataSource>('kdocs');
+  const [dataSource, setDataSource] = useState<DataSource>('url');
   const [activeTab, setActiveTab] = useState<TabName>('ranking');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [lastUpdate, setLastUpdate] = useState('');
+  const [kdocsUrl, setKDocsUrl] = useState('');
+  const [isFetching, setIsFetching] = useState(false);
 
   const pasteAreaRef = useRef<HTMLTextAreaElement>(null);
   const { notifications, showNotification } = useNotification();
@@ -50,6 +53,20 @@ export default function App() {
   const updateTime = useCallback(() => setLastUpdate(formatTime()), []);
 
   const handleAutoRefresh = useCallback(async () => {
+    // If URL mode, try fetching from URL
+    if (kdocsUrl) {
+      try {
+        const result = await fetchKDocsData(kdocsUrl);
+        if (result.success && result.teams.length > 0) {
+          setTeamsData(result.teams);
+          updateTime();
+          return;
+        }
+      } catch {
+        // Fall through to clipboard
+      }
+    }
+    // Fallback to clipboard
     try {
       const text = await navigator.clipboard.readText();
       if (text && text.length > 50) {
@@ -62,7 +79,7 @@ export default function App() {
     } catch {
       // Clipboard access may fail silently
     }
-  }, [updateTime]);
+  }, [kdocsUrl, updateTime]);
 
   const autoRefresh = useAutoRefresh(handleAutoRefresh);
 
@@ -107,6 +124,28 @@ export default function App() {
     updateTime();
     showNotification('排名已刷新', 'success');
   }, [teamsData.length, updateTime, showNotification]);
+
+  const handleFetchFromUrl = useCallback(async () => {
+    if (!kdocsUrl.trim()) {
+      showNotification('请输入金山文档链接', 'error');
+      return;
+    }
+    setIsFetching(true);
+    try {
+      const result = await fetchKDocsData(kdocsUrl);
+      if (result.success) {
+        setTeamsData(result.teams);
+        updateTime();
+        showNotification(result.message, 'success');
+      } else {
+        showNotification(result.message, 'error');
+      }
+    } catch (err) {
+      showNotification('获取数据失败: ' + (err as Error).message, 'error');
+    } finally {
+      setIsFetching(false);
+    }
+  }, [kdocsUrl, updateTime, showNotification]);
 
   const handleParseTable = useCallback(
     (text: string) => {
@@ -213,6 +252,10 @@ export default function App() {
           autoRefreshInterval={autoRefresh.interval}
           onAutoRefreshToggle={handleAutoRefreshToggle}
           onIntervalChange={autoRefresh.setInterval}
+          kdocsUrl={kdocsUrl}
+          onKDocsUrlChange={setKDocsUrl}
+          onFetchFromUrl={handleFetchFromUrl}
+          isFetching={isFetching}
         />
 
         <TabNavigation activeTab={activeTab} onTabChange={setActiveTab} />

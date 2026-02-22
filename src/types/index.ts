@@ -47,6 +47,6 @@ export type SortOrder = 'asc' | 'desc';
 
 export type NotificationType = 'success' | 'error' | 'info';
 
-export type DataSource = 'sample' | 'kdocs' | 'manual';
+export type DataSource = 'sample' | 'kdocs' | 'url' | 'manual';
 
 export type TabName = 'ranking' | 'playoff';
