@@ -55,3 +55,6 @@ desktop.ini
 temp/
 tmp/
 *.tmp
+
+# Claude Code task logs (local work state)
+.claude/task-log/
