@@ -1,0 +1,268 @@
+.container {
+  padding: 40px 30px;
+  background: white;
+  min-height: 600px;
+}
+
+.container h2 {
+  color: #333;
+  font-size: 2em;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.inputSection h3,
+.result h3 {
+  color: #667eea;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+.hint {
+  color: #666;
+  font-size: 0.9em;
+  margin-bottom: 15px;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  margin-bottom: 20px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.generateBtn {
+  padding: 15px 40px;
+  font-size: 1.1em;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.generateBtn:hover {
+  background: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.result {
+  margin-top: 30px;
+}
+
+.bracket {
+  display: flex;
+  gap: 40px;
+  padding: 30px 20px;
+  overflow-x: auto;
+  min-height: 500px;
+}
+
+.round {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 280px;
+}
+
+.roundTitle {
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #667eea;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #667eea;
+}
+
+.roundMatches {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  flex: 1;
+  justify-content: center;
+}
+
+.match {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.team {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.team:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.winner {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #f5f7ff 0%, #ffffff 100%);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.winner::before {
+  content: '✓';
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background: #667eea;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.teamSlot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 15px;
+}
+
+.seed {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #667eea;
+  min-width: 25px;
+  text-align: center;
+}
+
+.details {
+  flex: 1;
+  min-width: 0;
+}
+
+.teamName {
+  font-weight: bold;
+  font-size: 1em;
+  color: #2d3748;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.members {
+  font-size: 0.85em;
+  color: #718096;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.score {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #764ba2;
+  min-width: 50px;
+  text-align: right;
+}
+
+.matchNote {
+  text-align: center;
+  font-size: 0.9em;
+  color: #718096;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* Champion */
+.championRound {
+  min-width: 320px;
+}
+
+.championCard {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 16px;
+  padding: 40px 30px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4); }
+  50% { box-shadow: 0 10px 40px rgba(102, 126, 234, 0.6), 0 0 30px rgba(118, 75, 162, 0.4); }
+}
+
+.trophy {
+  font-size: 4em;
+  margin-bottom: 15px;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.championName {
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.championTeams {
+  font-size: 1.1em;
+  margin-bottom: 15px;
+  opacity: 0.95;
+}
+
+.championEpa {
+  font-size: 1.3em;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 10px 20px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .bracket {
+    gap: 30px;
+  }
+  .round {
+    min-width: 240px;
+  }
+  .roundMatches {
+    gap: 40px;
+  }
+  .championCard {
+    padding: 30px 20px;
+  }
+  .trophy {
+    font-size: 3em;
+  }
+  .championName {
+    font-size: 1.5em;
+  }
+}

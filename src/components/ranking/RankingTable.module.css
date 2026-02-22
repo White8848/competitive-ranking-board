@@ -1,0 +1,173 @@
+.container {
+  padding: 30px;
+  overflow-x: auto;
+}
+
+.searchResult {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 0.9em;
+  color: #28a745;
+  font-weight: 500;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+.table thead {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.table th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 1em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+}
+
+.sortable:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.active {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.sortIcon {
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+.active .sortIcon {
+  opacity: 1;
+  font-weight: bold;
+}
+
+.rankCol {
+  width: 80px;
+  text-align: center;
+}
+
+.teamCol {
+  min-width: 150px;
+}
+
+.teamClickable {
+  cursor: pointer;
+  color: #667eea;
+  font-weight: 500;
+  padding: 12px 15px;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.teamClickable:hover {
+  background: linear-gradient(135deg, rgba(102,126,234,0.08) 0%, rgba(118,75,162,0.08) 100%);
+  color: #764ba2;
+  transform: translateX(2px);
+}
+
+.badge {
+  font-size: 0.9em;
+  margin-left: 4px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.numberCol {
+  width: 100px;
+  text-align: center;
+}
+
+.scoreCol {
+  width: 120px;
+  text-align: center;
+}
+
+.epaCol {
+  width: 100px;
+  text-align: center;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+  transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+  background: #f8f9fa;
+  transform: scale(1.01);
+}
+
+.table td {
+  padding: 16px;
+  text-align: left;
+}
+
+.rankCol, .numberCol, .scoreCol, .epaCol {
+  text-align: center;
+}
+
+.noData {
+  text-align: center;
+  color: #999;
+  padding: 40px;
+  font-style: italic;
+}
+
+.rank1 {
+  background: linear-gradient(to right, #fff9e6, #ffffff);
+  font-weight: 600;
+}
+
+.rank2 {
+  background: linear-gradient(to right, #f0f0f0, #ffffff);
+  font-weight: 600;
+}
+
+.rank3 {
+  background: linear-gradient(to right, #fff3e6, #ffffff);
+  font-weight: 600;
+}
+
+.rank1 .rankCol {
+  font-size: 1.5em;
+}
+
+.rank2 .rankCol {
+  font-size: 1.3em;
+}
+
+.rank3 .rankCol {
+  font-size: 1.2em;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+  .table th, .table td {
+    padding: 10px 8px;
+    font-size: 0.9em;
+  }
+}

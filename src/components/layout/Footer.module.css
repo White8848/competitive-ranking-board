@@ -1,0 +1,23 @@
+.footer {
+  padding: 25px 30px;
+  background: #f8f9fa;
+  text-align: center;
+  color: #666;
+  border-top: 1px solid #e0e0e0;
+}
+
+.footer a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.lastUpdate {
+  margin-top: 8px;
+  font-size: 0.9em;
+  color: #999;
+}
